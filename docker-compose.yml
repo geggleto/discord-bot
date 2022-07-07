@@ -32,6 +32,22 @@ services:
     command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- php consumer.php'
     networks:
       - rabbitmq_nodejs
+  db:
+    container_name: db
+    environment:
+      MYSQL_PASSWORD: guest
+      MYSQL_ROOT_PASSWORD: guest
+      MYSQL_USER: guest
+    image: mysql:8.0.21
+    platform: "linux/amd64"
+    networks:
+      - rabbitmq_nodejs
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+    volumes:
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql-data:/var/lib/mysql
 networks:
   rabbitmq_nodejs:
     driver: bridge

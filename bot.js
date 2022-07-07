@@ -20,8 +20,9 @@ client.on('ready', async () => {
             message.reply("Help Menu").catch((e) => console.error(e));
         }
         if (command[0] === '!create') {
-            let obj = {};
-            RabbitHelpers.createCommand(process.env.RABBIT_QUEUE_NAME,  obj, (content) => {
+            RabbitHelpers.createCommand(process.env.RABBIT_QUEUE_NAME,  RabbitHelpers.makeCommand('create', {
+                discord_id: message.author.id
+            }), (content) => {
                 message.reply(content);
             });
         }

@@ -13,6 +13,11 @@
     ],
     "require": {
         "php-amqplib/php-amqplib": "^3.2",
-        "vlucas/phpdotenv": "^5.4"
+        "vlucas/phpdotenv": "^5.4",
+        "doctrine/orm": "^2.12",
+        "php-di/php-di": "^6",
+        "doctrine/migrations": "^3.5",
+        "symfony/cache": "^6.1",
+        "doctrine/annotations": "^1.13"
     }
 }
