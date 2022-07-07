@@ -1,0 +1,37 @@
+version: "3.2"
+services:
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file:
+      - .env
+    networks:
+      - rabbitmq_nodejs
+  bot:
+    build:
+      context: .
+      dockerfile: ./docker/bot/.Dockerfile
+    container_name: 'bot'
+    env_file:
+      - .env
+    depends_on:
+          - "rabbitmq"
+    command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- node bot.js'
+    networks:
+      - rabbitmq_nodejs
+  consumer:
+    build:
+      context: .
+      dockerfile: ./docker/consumers/.Dockerfile
+    container_name: 'consumer'
+    env_file:
+      - .env
+    command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- php consumer.php'
+    networks:
+      - rabbitmq_nodejs
+networks:
+  rabbitmq_nodejs:
+    driver: bridge
