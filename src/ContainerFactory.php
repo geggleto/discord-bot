@@ -3,8 +3,10 @@
 namespace DiscordBot;
 
 use DI\ContainerBuilder;
+use DiscordBot\Domain\Users\CreateNewUserHandler;
 use DiscordBot\Handlers\CreateHandler;
 use DiscordBot\Infrastructure\MessageBus;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\Setup;
@@ -31,6 +33,8 @@ class ContainerFactory
                     'driver' => 'pdo_mysql',
                 ];
 
+                Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+
                 // obtaining the entity manager
                 return EntityManager::create($conn, $config);
             },
@@ -39,7 +43,7 @@ class ContainerFactory
             },
             MessageBus::class => function (ContainerInterface $container): MessageBus {
                 $bus = new MessageBus($container);
-                $bus->register('create', CreateHandler::class);
+                $bus->register('!create', CreateNewUserHandler::class);
                 return $bus;
             }
         ]);

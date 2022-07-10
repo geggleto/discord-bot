@@ -7,6 +7,7 @@ namespace Bot;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Migrations\AbstractMigration;
+use MongoDB\BSON\Type;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -24,9 +25,10 @@ final class Version20220707170736 extends AbstractMigration
         $table = $schema->createTable('registrations');
         $table->addColumn('uuid', Types::GUID);
         $table->addColumn('discord_id', Types::STRING, ['length' => 18]);
+        $table->addColumn('eth_address', Types::STRING, ['length' => 42]);
 
         $table->setPrimaryKey(['uuid']);
-        $table->addIndex(['discord_id'], 'reg_discord_id');
+        $table->addUniqueIndex(['discord_id'], 'reg_discord_id');
     }
 
     public function down(Schema $schema): void

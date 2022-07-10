@@ -32,6 +32,8 @@ services:
     command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- php consumer.php'
     networks:
       - rabbitmq_nodejs
+    volumes:
+      - .:/src
   db:
     container_name: db
     environment:

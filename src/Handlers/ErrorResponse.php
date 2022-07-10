@@ -2,12 +2,13 @@
 
 namespace DiscordBot\Handlers;
 
-class CreateResponse extends CommandResponse
+class ErrorResponse extends CommandResponse
 {
     public function jsonSerialize(): array
     {
         return [
-            'message' => 'Command Executed'
+            'code' => 500,
+            'message' => 'Command Failed'
         ];
     }
 }
