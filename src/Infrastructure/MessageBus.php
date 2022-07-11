@@ -27,7 +27,14 @@ class MessageBus
             throw new RuntimeException("Handler already defined for ${key}");
         }
 
-        $this->registrations[$key] = $this->container->get($handler);
+        $callable = $this->container->get($handler);
+        if ($callable === null) {
+            throw new \RuntimeException(
+                'Handler Construction Failed'
+            );
+        }
+
+        $this->registrations[$key] = $callable;
     }
 
     public function handle(string $commandName, array $payload): CommandResponse

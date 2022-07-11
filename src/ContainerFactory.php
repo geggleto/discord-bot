@@ -12,6 +12,9 @@ use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\Setup;
 use Essentials\Application\Definitions\EnvStage;
 use Essentials\Application\Settings\Settings;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use Psr\Container\ContainerInterface;
 
@@ -43,9 +46,14 @@ class ContainerFactory
             },
             MessageBus::class => function (ContainerInterface $container): MessageBus {
                 $bus = new MessageBus($container);
-                $bus->register('!create', CreateNewUserHandler::class);
+                $bus->register('create', CreateNewUserHandler::class);
                 return $bus;
-            }
+            },
+            Logger::class => function (ContainerInterface $container): Logger {
+                $logger = new Logger('drl-bot');
+                $logger->pushHandler(new StreamHandler(__DIR__.'/../logs/drl-consumer.log', Level::Warning));
+                return $logger;
+            },
         ]);
         return $container->build();
     }

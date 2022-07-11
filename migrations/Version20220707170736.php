@@ -25,7 +25,7 @@ final class Version20220707170736 extends AbstractMigration
         $table = $schema->createTable('registrations');
         $table->addColumn('uuid', Types::GUID);
         $table->addColumn('discord_id', Types::STRING, ['length' => 18]);
-        $table->addColumn('eth_address', Types::STRING, ['length' => 42]);
+        $table->addColumn('eth_address', Types::STRING, ['length' => 42, 'notnull' => false]);
 
         $table->setPrimaryKey(['uuid']);
         $table->addUniqueIndex(['discord_id'], 'reg_discord_id');
